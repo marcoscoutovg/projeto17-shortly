@@ -9,12 +9,12 @@ export async function signUp(req, res) {
 
     if (password !== confirmPassword) return sendStatus(422);
     
-    const verifyEmail = await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
-    if (verifyEmail.rows.lenght > 0) return res.status(409).send("E-mail já cadastrado!");
+    const verifyEmail = await db.query(`SELECT * FROM users WHERE email = $1;`, [email]);
+    if (verifyEmail.rows.lenght !== 0) return res.status(409).send("E-mail já cadastrado!");
 
     const hashPassword = bcrypt.hashSync(password, 10);
 
-    await db.query(`INSERT INTO users (name, email, password) VALUES ($1, $2, $3)`, [name, email, hashPassword]);
+    await db.query(`INSERT INTO users (name, email, password) VALUES ($1, $2, $3);`, [name, email, hashPassword]);
     res.sendStatus(201);
   } catch (err) {
     res.status(500).send(err.message);
@@ -25,7 +25,7 @@ export async function signIn(req, res) {
   const { email, password } = req.body;
 
   try {
-    const login = await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
+    const login = await db.query(`SELECT * FROM users WHERE email = $1;`, [email]);
     if (login.rows.length === 0) return res.status(401).send("E-mail não cadastrado!");
 
     const passwordCorrect = bcrypt.compareSync(password, login.rows[0].password);
@@ -35,7 +35,7 @@ export async function signIn(req, res) {
 
     const token = uuid();
 
-    await db.query(`INSERT INTO sessions ('userId, name, token) VALUES (($1, $2, $3))`, [user.id, user.name,token]);
+    await db.query(`INSERT INTO sessions ("userId", name, token) VALUES (($1, $2, $3);)`, [user.id, user.name,token]);
     res.status(200).send({token});
   } catch (err) {
     res.status(500).send(err.message);
