@@ -9,14 +9,14 @@ export async function shortenUrl(req, res) {
     try {
         const token = res.locals.session.token
 
-        const userId = await db.query(`SELECT "userId" FROM sessions WHERE token=$1;`, [token])
+        const dataUserSession = await db.query(`SELECT * FROM sessions WHERE token=$1;`, [token])
 
         await db.query(`INSERT INTO "shortedUrls" ("userId", url, "shortUrl")
-        VALUES ($1, $2, $3);`, [userId, url, shortUrl])
+        VALUES ($1, $2, $3);`, [dataUserSession.rows[0].userId, url, shortUrl])
 
-        const idShortUrl = await db.query(`SELECT id FROM "shortedUrls" WHERE "shortUrl" = $1;`, [shortUrl])
+        const dataShortUrl = await db.query(`SELECT * FROM "shortedUrls" WHERE "shortUrl" = $1;`, [shortUrl])
 
-        res.status(201).send({ idShortUrl, shortUrl })
+        res.status(201).send({ id: dataShortUrl.rows[0].id, shortUrl })
     } catch (err) {
         res.sendStatus(500)
     }
