@@ -7,16 +7,14 @@ export async function shortenUrl(req, res) {
     const shortUrl = nanoid(8);
 
     try {
-        const token = res.locals.session.rows[0].token
-
-        const user = await db.query(`SELECT * FROM sessions WHERE token=$1;`, [token])
+        const { userId } = res.locals
 
         await db.query(`INSERT INTO shortedUrls ("userId", url, "shortUrl")
-        VALUES ($1, $2, $3);`, [user.rows[0].userId, url, shortUrl])
+        VALUES ($1, $2, $3);`, [userId, url, shortUrl])
 
-        const url = await db.query(`SELECT * FROM shortedUrls WHERE "shortUrl" = $1;`, [shortUrl])
+        const dataUrl = await db.query(`SELECT * FROM shortedUrls WHERE "shortUrl" = $1;`, [shortUrl])
 
-        res.status(201).send({ id: url.rows[0].id, shortUrl: url.rows[0].shortUrl })
+        res.status(201).send({ id: dataUrl.rows[0].id, shortUrl: dataUrl.rows[0].shortUrl })
     } catch (err) {
         res.sendStatus(500)
     }
@@ -41,10 +39,10 @@ export async function openUrl(req, res) {
     const { shortUrl } = req.body;
 
     try {
-        const infoUrl = await db.query(`SELECT * FROM shortedUrls WHERE "shortUrl" = $1;`,[shortUrl])
+        const infoUrl = await db.query(`SELECT * FROM shortedUrls WHERE "shortUrl" = $1;`, [shortUrl])
         if (infoUrl.rows.length === 0) return res.sendStatus(404);
 
-        await db.query(`UPDATE shortedUrls SET "visitCount" = Number("visitCount")+1 WHERE "shortUrl"=$1;`,[shortUrl])
+        await db.query(`UPDATE shortedUrls SET "visitCount" = Number("visitCount")+1 WHERE "shortUrl"=$1;`, [shortUrl])
         const url = infoUrl.rows[0].url
         return res.redirect(url);
     } catch (err) {
@@ -58,12 +56,12 @@ export async function deleteUrl(req, res) {
 
     try {
 
-        const url = await db.query(`SELECT * FROM shortedUrls WHERE id = $1;`,[id])
-        
-        if (url.rows.length === 0) return res.sendStatus(404)
-        
+        const url = await db.query(`SELECT * FROM shortedUrls WHERE id = $1;`, [id])
 
-        await db.query(`DELETE FROM "shortedUrls" WHERE id = $1`,[id])
+        if (url.rows.length === 0) return res.sendStatus(404)
+
+
+        await db.query(`DELETE FROM "shortedUrls" WHERE id = $1`, [id])
         res.sendStatus(204)
     } catch (err) {
         res.sendStatus(500)
