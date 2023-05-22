@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authValidate } from "../middlewares/auth.middlewares";
+import { authValidate } from "../middlewares/auth.middlewares.js";
 
 const usersRouter = Router()
 
