@@ -7,16 +7,16 @@ export async function shortenUrl(req, res) {
     const shortUrl = nanoid(8);
 
     try {
-        const token = res.locals.session.token
+        const token = res.locals.session.rows[0].token
 
-        const userId = await db.query(`SELECT "userId" FROM sessions WHERE token=$1;`, [token])
+        const user = await db.query(`SELECT * FROM sessions WHERE token=$1;`, [token])
 
         await db.query(`INSERT INTO shortedUrls ("userId", url, "shortUrl")
-        VALUES ($1, $2, $3);`, [userId, url, shortUrl])
+        VALUES ($1, $2, $3);`, [user.rows[0].userId, url, shortUrl])
 
-        const idUrl = await db.query(`SELECT id FROM shortedUrls WHERE "shortUrl" = $1;`, [shortUrl])
+        const url = await db.query(`SELECT * FROM shortedUrls WHERE "shortUrl" = $1;`, [shortUrl])
 
-        res.status(201).send({ id: idUrl, shortUrl })
+        res.status(201).send({ id: url.rows[0].id, shortUrl: url.rows[0].shortUrl })
     } catch (err) {
         res.sendStatus(500)
     }
