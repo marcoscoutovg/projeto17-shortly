@@ -1,6 +1,6 @@
 import { db } from "../database/database.connection";
 
-export async function getRanking(req, res) {
+/* export async function getRanking(req, res) {
     try {
         await db.query(`SELECT id AND name`)
 
@@ -9,3 +9,4 @@ export async function getRanking(req, res) {
         res.sendStatus(500)
     }
 }
+*/
