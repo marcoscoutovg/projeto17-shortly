@@ -5,13 +5,16 @@ import { v4 as uuid } from "uuid";
 export async function signUp(req, res) {
   const { name, email, password, confirmPassword } = req.body;
 
-  try {  
+  try {
+
+    if (password !== confirmPassword) return sendStatus(422);
+    
     const verifyEmail = await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
-    if (verifyEmail.rows[0].lenght !== 0) return res.status(409).send("E-mail já cadastrado!");
+    if (verifyEmail.rows.lenght > 0) return res.status(409).send("E-mail já cadastrado!");
 
     const hashPassword = bcrypt.hashSync(password, 10);
 
-    await db.query(`INSERT INTO users (name, email, password) VALUES ($1, $2, $3);`, [name, email, hashPassword]);
+    await db.query(`INSERT INTO users (name, email, password) VALUES ($1, $2, $3)`, [name, email, hashPassword]);
     res.sendStatus(201);
   } catch (err) {
     res.status(500).send(err.message);
