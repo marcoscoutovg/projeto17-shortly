@@ -61,7 +61,7 @@ CREATE TABLE public.shortedurls (
     id integer NOT NULL,
     "userId" integer NOT NULL,
     url text NOT NULL,
-    "shortedUrl" text NOT NULL,
+    "shortUrl" text NOT NULL,
     "visitCount" integer DEFAULT 0 NOT NULL,
     "createdAt" timestamp without time zone DEFAULT now() NOT NULL
 );
