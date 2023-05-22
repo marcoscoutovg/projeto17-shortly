@@ -7,7 +7,7 @@ export async function signUp(req, res) {
 
   try {  
     const verifyEmail = await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
-    if (verifyEmail.rows.lenght > 0) return res.status(409).send("E-mail já cadastrado!");
+    if (verifyEmail.rows[0].lenght !== 0) return res.status(409).send("E-mail já cadastrado!");
 
     const hashPassword = bcrypt.hashSync(password, 10);
 
