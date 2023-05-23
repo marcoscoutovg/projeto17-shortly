@@ -1,17 +1,16 @@
-import { db } from "../database/database.connection";
+import { db } from "../database/database.connection.js";
 
 export async function me(req, res) {
 
     try {
-        const session = res.locals.session
-        const token = session.rows[0].token
+        const userId = res.locals.session
 
        const me = await db.query(`SELECT users.id, users.name, SUM("shortedUrls"."visitCount") AS "visitCount"
          FROM users
         JOIN "shortedUrls" ON "shortedUrls"."userId" = users.id
         JOIN sessions ON users.id = sessions."userId"
-        WHERE token = $1
-        GROUP BY users.id;`, [token])
+        WHERE "userId" = $1
+        GROUP BY users.id;`, [userId])
 
         const url = await db.query(`SELECT "shortedUrls".id, "shortedUrls"."shortUrl", "shortedUrls".url, "shortedUrls"."visitCount"
         FROM "shortedUrls"

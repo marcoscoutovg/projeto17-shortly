@@ -145,6 +145,8 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: sessions; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.sessions VALUES (1, 1, 'aaaaaaaa', 'b637b6d5-57fc-4c5d-af67-3b184865faeb', '2023-05-22 22:58:52.91756');
+INSERT INTO public.sessions VALUES (5, 2, 'aaaaaaaa', '75a99bb1-a44a-40fe-8d10-96db5a6be8e5', '2023-05-22 23:17:39.139269');
 
 
 --
@@ -157,6 +159,9 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.users VALUES (1, 'aaaaaaaa', 'asdsaaaaa@gmail.com', '$2b$10$JL2UqbYgbrYFv36bkw1JQ.5jnTTVUZ5iU4FOiYQuAcvPcODz9hhCy', '2023-05-22 22:58:26.601436');
+INSERT INTO public.users VALUES (2, 'aaaaaaaa', 'asdasdsaaaaa@gmail.com', '$2b$10$BjmjTpZ16H3S7H2ulV3Qi.kOVYey6xFe4o0/kJ67j5PebGoFC9kcy', '2023-05-22 23:17:31.819875');
+INSERT INTO public.users VALUES (3, 'aaaaaaaa', 'asas@gmail.com', '$2b$10$rI6u0HvdLTsuLLStRlhZYeoJzltcCqbJJqJjOs3w9hpXaClp/XDz2', '2023-05-23 01:36:15.450897');
 
 
 --

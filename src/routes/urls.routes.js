@@ -6,7 +6,7 @@ import { urlSchema } from "../schemas/urls.schemas.js";
 
 const urlsRouter = Router()
 
-urlsRouter.post("/urls/shorten", validateSchema(urlSchema), shortenUrl)
+urlsRouter.post("/urls/shorten", validateSchema(urlSchema), authValidate, shortenUrl)
 urlsRouter.get("/urls/:id", getUrlById)
 urlsRouter.get("/urls/open/:shortUrl", openUrl)
 urlsRouter.delete("/urls/:id", authValidate, deleteUrl)

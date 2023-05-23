@@ -4,17 +4,17 @@ import { db } from "../database/database.connection.js";
 export async function shortenUrl(req, res) {
 
     const { url } = req.body;
+    const {userId} = res.locals.session
     const shortUrl = nanoid(8);
 
     try {
-        const { userId } = res.locals
 
         await db.query(`INSERT INTO shortedUrls ("userId", url, "shortUrl")
         VALUES ($1, $2, $3);`, [userId, url, shortUrl])
 
-        const dataUrl = await db.query(`SELECT * FROM shortedUrls WHERE "shortUrl" = $1;`, [shortUrl])
+        const dataUrl = await db.query(`SELECT * FROM shorteudrls WHERE "shortUrl" = $1;`, [shortUrl])
 
-        res.status(201).send({ id: dataUrl.rows[0].id, shortUrl: dataUrl.rows[0].shortUrl })
+        res.status(201).send({ id: dataUrl.rows[0].id, shortUrl})
     } catch (err) {
         res.sendStatus(500)
     }
