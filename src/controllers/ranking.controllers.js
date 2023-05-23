@@ -8,7 +8,7 @@ export async function getRanking(req, res) {
         JOIN shortedUrls ON shortedUrls.userId = users.id
         GROUP BY users.id
         ORDER BY "visitCount" DESC
-        LIMIT 10`)
+        LIMIT 10;`)
 
         res.status(200).send(ranking.rows)
     } catch(err) {
